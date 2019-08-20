@@ -713,14 +713,14 @@ function cyberchimps_customize( $wp_customize ) {
 			$wp_customize,
 			'flickr_url',
 			array(
-				'label'    => __( 'Youtube URL', 'cyberchimps_core' ),
+				'label'    => __( 'Flickr URL', 'cyberchimps_core' ),
 				'section'  => 'cyberchimps_social_media',
 				'settings' => 'cyberchimps_options[flickr_url]',
 			)
 		)
 	);
 
-	// Add Pinterest Setting
+	// Add Pinterest Setting.
 	$wp_customize->add_setting(
 		'cyberchimps_options[social_pinterest]',
 		array(
@@ -798,7 +798,7 @@ function cyberchimps_customize( $wp_customize ) {
 		)
 	);
 
-	// Add Email Setting
+	// Add Email Setting.
 	$wp_customize->add_setting(
 		'cyberchimps_options[social_email]',
 		array(
@@ -1616,7 +1616,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Portfolio image 4
+		// Portfolio image 4.
 		$wp_customize->add_setting(
 			'cyberchimps_options[cyberchimps_blog_portfolio_lite_image_four]',
 			array(
@@ -1637,7 +1637,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Portfolio caption 4
+		// Portfolio caption 4.
 		$wp_customize->add_setting(
 			'cyberchimps_options[cyberchimps_blog_portfolio_lite_image_four_caption]',
 			array(
@@ -1656,7 +1656,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Portfolio link checkbox 4
+		// Portfolio link checkbox 4.
 		$wp_customize->add_setting(
 			'cyberchimps_options[cyberchimps_blog_portfolio_link_toggle_four]',
 			array(
