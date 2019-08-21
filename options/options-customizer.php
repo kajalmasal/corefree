@@ -354,67 +354,7 @@ function cyberchimps_customize( $wp_customize ) {
 		)
 	);
 
-	// Add Disable favicon
-	$wp_customize->add_setting(
-		'cyberchimps_options[custom_favicon]',
-		array(
-			'type'              => 'option',
-			'sanitize_callback' => 'cyberchimps_sanitize_checkbox',
-		)
-	);
-
-	$wp_customize->add_control(
-		'custom_favicon',
-		array(
-			'label'    => __( 'Display Favicon?', 'cyberchimps_core' ),
-			'section'  => 'cyberchimps_header_section',
-			'settings' => 'cyberchimps_options[custom_favicon]',
-			'type'     => 'checkbox',
-		)
-	);
-
-	// Add favicon image
-	$wp_customize->add_setting(
-		'cyberchimps_options[favicon_uploader]',
-		array(
-			'type'              => 'option',
-			'sanitize_callback' => 'cyberchimps_sanitize_upload',
-		)
-	);
-
-	$wp_customize->add_control(
-		new WP_Customize_Image_Control(
-			$wp_customize,
-			'favicon_uploader',
-			array(
-				'label'    => __( 'Upload Favicon Image', 'cyberchimps_core' ),
-				'section'  => 'cyberchimps_header_section',
-				'settings' => 'cyberchimps_options[favicon_uploader]',
-				'type'     => 'image',
-			)
-		)
-	);
-
-	// Add Disable Custom Apple touch icon
-	$wp_customize->add_setting(
-		'cyberchimps_options[custom_apple]',
-		array(
-			'type'              => 'option',
-			'sanitize_callback' => 'cyberchimps_sanitize_checkbox',
-		)
-	);
-
-	$wp_customize->add_control(
-		'custom_apple',
-		array(
-			'label'    => __( 'Display Custom Apple touch icon?', 'cyberchimps_core' ),
-			'section'  => 'cyberchimps_header_section',
-			'settings' => 'cyberchimps_options[custom_apple]',
-			'type'     => 'checkbox',
-		)
-	);
-
-	// Disable search bar
+	// Disable search bar.
 	$wp_customize->add_setting(
 		'cyberchimps_options[searchbar]',
 		array(
