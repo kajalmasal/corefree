@@ -28,7 +28,7 @@ if ( ! class_exists( 'Cyberchimps_Hooks' ) ) {
 			add_filter( 'dynamic_sidebar_params', __CLASS__ . '::cyberchimps_footer_widgets' );
 			add_action( 'cyberchimps_header', __CLASS__ . '::cyberchimps_header_section_order' );
 			add_action( 'cyberchimps_header_content', __CLASS__ . '::cyberchimps_logo_icons' );
-			add_action( 'cyberchimps_header_content', __CLASS__ . '::cyberchimps_logo_searchform' );
+			add_action( 'cyberchimps_logo_search', __CLASS__ . '::cyberchimps_logo_searchform' );
 			add_action( 'cyberchimps_description_icons', __CLASS__ . '::cyberchimps_description_icons' );
 			add_action( 'cyberchimps_sitename_contact', __CLASS__ . '::cyberchimps_sitename_contact' );
 			add_action( 'cyberchimps_logo_description', __CLASS__ . '::cyberchimps_logo_description' );
@@ -64,6 +64,9 @@ if ( ! class_exists( 'Cyberchimps_Hooks' ) ) {
 			$blog_section_order = Cyberchimps_Helper::cyberchimps_get_option( 'blog_section_order', $defaults );
 			// select default in case options are empty.
 			$blog_section_order = ( '' === $blog_section_order ) ? array( 'blog_post_page' ) : $blog_section_order;
+			if ( get_theme_mod( 'blog_section_order' ) ) {
+				$blog_section_order = get_theme_mod( 'blog_section_order' );
+			}
 			$slider_size        = Cyberchimps_Helper::cyberchimps_get_option( 'blog_slider_size', 'full' );
 			if ( is_array( $blog_section_order ) ) {
 
@@ -256,8 +259,11 @@ if ( ! class_exists( 'Cyberchimps_Hooks' ) ) {
 			// call the database results and if they don't exist then call the defaults from above.
 			$header_section = Cyberchimps_Helper::cyberchimps_get_option( 'header_section_order', $defaults );
 			$header_section = ( '' === $header_section ) ? $defaults : $header_section;
-
+			if ( get_theme_mod( 'header_section_order' ) ) {
+				$header_section = get_theme_mod( 'header_section_order' );
+			}
 			if ( is_array( $header_section ) ) {
+
 				foreach ( $header_section as $func ) {
 					do_action( $func );
 				}
@@ -947,7 +953,7 @@ if ( ! class_exists( 'Cyberchimps_Hooks' ) ) {
 			} else {
 				$skin = $skins;
 			}
-			if ( 'default' !== $skin ) {
+			if ( ! empty( $skin ) && 'default' !== $skin ) {
 				wp_enqueue_style( 'skin-style', get_template_directory_uri() . '/inc/css/skins/' . $skin . '.css', array( 'style' ), '1.0' );
 			}
 		}

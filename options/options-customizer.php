@@ -923,7 +923,7 @@ function cyberchimps_customize( $wp_customize ) {
 		$wp_customize->add_setting(
 			'cyberchimps_options[sidebar_images]',
 			array(
-				'default'           => array( 'default' => $imagepath . '2cr.png' ),
+				'default'           => $imagepath . '2cr.png',
 				'type'              => 'option',
 				'sanitize_callback' => 'cyberchimps_text_sanitization',
 			)
@@ -1233,7 +1233,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Slider image 2
+		// Slider image 2.
 		$wp_customize->add_setting(
 			'cyberchimps_options[image_two_slide]',
 			array(
@@ -1254,7 +1254,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Slider image 2 url
+		// Slider image 2 url.
 		$wp_customize->add_setting(
 			'cyberchimps_options[image_two_slide_url]',
 			array(
@@ -1272,7 +1272,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Slider image 3
+		// Slider image 3.
 		$wp_customize->add_setting(
 			'cyberchimps_options[image_three_slide]',
 			array(
@@ -1293,7 +1293,7 @@ function cyberchimps_customize( $wp_customize ) {
 			)
 		);
 
-		// Slider image 3 url
+		// Slider image 3 url.
 		$wp_customize->add_setting(
 			'cyberchimps_options[image_three_slide_url]',
 			array(
@@ -2552,7 +2552,7 @@ function cyberchimps_customize( $wp_customize ) {
 		$wp_customize->add_setting(
 			'cyberchimps_options[cyberchimps_skin_color]',
 			array(
-				'default'           => array( 'default' => get_template_directory_uri() . '/inc/css/skins/images/default.png' ),
+				'default'           => get_template_directory_uri() . '/inc/css/skins/images/default.png',
 				'type'              => 'option',
 				'sanitize_callback' => 'cyberchimps_text_sanitization',
 			)
@@ -2883,4 +2883,104 @@ function cyberchimps_sanitize_multiple_checkboxes( $values ) {
 	$multi_values = ! is_array( $values ) ? explode( ',', $values ) : $values;
 
 	return ! empty( $multi_values ) ? array_map( 'sanitize_text_field', $multi_values ) : array();
+}
+
+/**
+ * Adds custom controls.
+ *
+ * @param object $wp_customize WordPress customizer.
+ *
+ * @since 1.0.0
+ */
+function cyberchimps_custom_controls( $wp_customize ) {
+
+	// Path.
+	$dir = get_template_directory() . '/cyberchimps/options/controls/';
+
+	// Load customize control classes.
+	require_once $dir . 'sortable/class-cyberchimps-customizer-sortable-control.php';
+
+	// Register JS control types.
+	$wp_customize->register_control_type( 'Cyberchimps_Customizer_Sortable_Control' );
+
+	$wp_customize->add_setting(
+		'blog_section_order',
+		array(
+			'default'           => array( 'blog_post_page' ),
+			'sanitize_callback' => 'cyberchimps_sanitize_multi_choices',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new Cyberchimps_Customizer_Sortable_Control(
+			$wp_customize,
+			'blog_section_order',
+			array(
+				'label'    => esc_html__( 'Drag & Drop Blog Elements', 'cyberchimps_core' ),
+				'section'  => 'cyberchimps_layout_section',
+				'settings' => 'blog_section_order',
+				'priority' => 10,
+				'choices'  => apply_filters(
+					'cyberchimps_elements_draganddrop_options',
+					array(
+						'boxes_lite'     => __( 'Boxes', 'cyberchimps_core' ),
+						'portfolio_lite' => __( 'Portfolio Lite', 'cyberchimps_core' ),
+						'blog_post_page' => __( 'Post Page', 'cyberchimps_core' ),
+						'slider_lite'    => __( 'Slider Lite', 'cyberchimps_core' ),
+					)
+				),
+			)
+		)
+	);
+	$wp_customize->add_setting(
+		'header_section_order',
+		array(
+			'default'           => array( 'cyberchimps_header_content' ),
+			'sanitize_callback' => 'cyberchimps_sanitize_multi_choices',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		new Cyberchimps_Customizer_Sortable_Control(
+			$wp_customize,
+			'header_section_order',
+			array(
+				'label'    => esc_html__( 'Drag & Drop Header Elements', 'cyberchimps_core' ),
+				'section'  => 'cyberchimps_layout_section',
+				'settings' => 'header_section_order',
+				'priority' => 10,
+				'choices'  => apply_filters(
+					'header_drag_and_drop_options',
+					array(
+						'cyberchimps_header_content' => __( 'Logo + Icons', 'cyberchimps_core' ),
+						'cyberchimps_logo_search'    => __( 'Logo + Search', 'cyberchimps_core' ),
+						'cyberchimps_logo'           => __( 'Logo', 'cyberchimps_core' ),
+					)
+				),
+			)
+		)
+	);
+}
+add_action( 'customize_register', 'cyberchimps_custom_controls' );
+
+/**
+ * Select choices sanitization callback
+ *
+ * @param  object $input    arguments.
+ * @param  object $setting    arguments.
+ * @since 1.2.1
+ */
+function cyberchimps_sanitize_multi_choices( $input, $setting ) {
+	// Get list of choices from the control associated with the setting.
+	$choices    = $setting->manager->get_control( $setting->id )->choices;
+	$input_keys = $input;
+
+	foreach ( $input_keys as $key => $value ) {
+		if ( ! array_key_exists( $value, $choices ) ) {
+			unset( $input[ $key ] );
+		}
+	}
+	// If the input is a valid key, return it;
+	// otherwise, return the default.
+	return ( is_array( $input ) ? $input : $setting->default );
 }
